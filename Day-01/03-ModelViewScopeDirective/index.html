@@ -98,11 +98,13 @@
             <label for="">DA :</label>
             <input type="text" id="txtDa" app-model="calculator.da">
         </div>
+
         <div class="field">
             <label for="">Tax :</label>
             <input type="range" value="0" id="rangeTax" min="0" max="30" app-model="calculator.tax">
             <span id="spanTax" app-bind="calculator.tax">[Tax :]</span>
         </div>
+
         <div class="field"><input type="button" value="Calculate" id="btnCalculate" app-click="calculator.calculate()"></div>
         <div class="field">
             <div id="divResult" app-bind="calculator.salary">[Salary]</div>
