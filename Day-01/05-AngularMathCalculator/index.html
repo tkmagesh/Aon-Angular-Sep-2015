@@ -35,26 +35,28 @@
         scope.$apply();
     });*/
 
-    var myApp = angular.module("myApp", []);
-    myApp.controller("calculatorController", function($scope){
-        $scope.calculator = new Calculator();
+    var myApp = angular.module("myApp", ["ng"]);
+    myApp.controller("calculatorController", function($scope, $compile, $parse){
+        console.log("aruguments length = ", arguments.length);
+        /*$scope.calculator = new Calculator();
         $scope.operation = '';
         $scope.calculate = function(){
             $scope.calculator[$scope.operation]();
-        }
+        }*/
     });
     </script>
 </head>
-<body ng-app="myApp" ng-controller="calculatorController">
-    <input type="text" ng-model="calculator.number1">
-    <select ng-model="operation">
-        <option value="add">add</option>
-        <option value="subtract">subtract</option>
-        <option value="multiply">multiply</option>
-        <option value="divide">divide</option>
-    </select>
-    <input type="text" ng-model="calculator.number2">
-    <input type="button" value="Calculate" ng-click="calculate()">
-    <div id="divResult" ng-bind="calculator.result | currency:'Rs.'"></div>
+<body ng-app="myApp">
+   <div ng-controller="calculatorController">
+        <input type="text" ng-model="calculator.number1">
+        <select ng-model="operation">
+            <option value="add">add</option>
+            <option value="subtract">subtract</option>
+            <option value="multiply">multiply</option>
+            <option value="divide">divide</option>
+        </select>
+        <input type="text" ng-model="calculator.number2">
+        <input type="button" value="Calculate" ng-click="calculate()">
+        <div id="divResult" ng-bind="calculator.result | currency:'Rs.'"></div>    </div>
 </body>
 </html>

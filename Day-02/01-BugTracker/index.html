@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+        .stats, .search, .sort, .list{
+            margin-bottom: 10px;
+        }
+        .closed {
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        ol{
+            width : 50%;
+            list-style: none;
+            -webkit-padding-start : 0px;
+        }
+        li{
+            border : 1px solid grey;
+            background-color: lightgrey;
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .stats{
+            font-size: 15pt;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+    /*Use Cases*/
+    /*
+    1. List the bugs
+    2. Add a new bug
+    3. Toggle the closed status of the bug
+    4. Remove closed bugs
+    5. Display statistics
+    6. Search for bugs
+    7. Sort the bugs
+    8. Improvise the bug display
+    9. Persist the bugs in the local storage
+    10. Display the createdAt field
+    11. Persist the bugs in the server
+    12. Categorize the bugs
+    13. Display bugs by categories
+    =========
+    14. Create the "Project" management (list, add)
+    15. Modify the "bugs" section to accommodate the "project"
+    16. List the bugs by "project"
+    */
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr>
+    <section class="content">
+        <div class="stats">
+            <span class="closed">3</span> / <span>5</span>
+        </div>
+        <div class="search"></div>
+        <div class="sort"></div>
+        <div class="list">
+            <label for="">Bug :</label>
+            <input type="text" name="" id="">
+            <input type="button" value="Add New">
+            <input type="button" value="Remove Closed">
+            <ol>
+                <li>Stack overflow error</li>
+                <li>Object reference not set to an instance of an object</li>
+                <li class="closed">Unable to add new bug</li>
+            </ol>
+        </div>
+    </section>
+</body>
+</html>
