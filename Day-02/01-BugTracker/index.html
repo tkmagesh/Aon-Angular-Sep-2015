@@ -41,7 +41,7 @@
     5. Display statistics - done
     6. Search for bugs - done
     7. Sort the bugs - done
-    8. Improvise the bug display
+    8. Improvise the bug display - done
     9. Persist the bugs in the local storage
     10. Display the createdAt field
     11. Persist the bugs in the server
@@ -125,12 +125,30 @@
             };*/
         });
 
-        bugTrackerApp.filter("trimText", function(){
+        bugTrackerApp.value("defaultTrimTextLength", 20);
+        bugTrackerApp.filter("trimText", function(defaultTrimTextLength){
             return function(bugName, trimLength){
-                trimLength = trimLength || 20;
+                trimLength = trimLength || defaultTrimTextLength;
                 return bugName.length <= trimLength ? bugName : bugName.substr(0,trimLength) + '...';
         };
         });
+
+        /*
+        window.localStorage
+            - key/value store
+            - key and value should be strings
+            - apis
+                * length
+                * setItem(k, v)
+                * getItem(k) => v
+                * removeItem(k)
+                * key(index) => k
+                * clear()
+
+        use angular.toJson() and angular.fromJson() for serialization / deserialization of the bugs
+
+
+        */
     </script>
 </head>
 <body ng-app="bugTrackerApp">
