@@ -55,25 +55,58 @@
     </script>
     <script src="angular.js"></script>
     <script>
-        var bugTrackerApp = angular.module("bugTrackerApp", []);
+        var bugTrackerApp = angular.module("bugTrackerApp", ["ng"]);
+        /*bugTrackerApp.value("Bug", function Bug(name){
+            this.name = name;
+            this.isClosed = false;
+            this.category = 'client';
+            this.toggle = function(){
+                this.isClosed = !this.isClosed;
+            }
+        });*/
 
-        bugTrackerApp.controller("bugsController", function($scope){
+
+        /*bugTrackerApp.factory("Bug", function(){
+            function Bug(bugName){
+                this.name = bugName;
+                this.isClosed = false;
+                this.category = 'client'
+            };
+            Bug.prototype.toggle = function(){
+                this.isClosed = !this.isClosed;
+            };
+            return Bug;
+        });*/
+
+        bugTrackerApp.factory("bug", function(){
+            function Bug(){}
+            Bug.prototype.toggle = function(){
+                this.isClosed = !this.isClosed;
+            }
+            return function (name){
+                var bug = new Bug();
+                bug.name = name;
+                bug.isClosed = false;
+                bug.category = 'client';
+                return bug;
+            }
+        })
+
+        bugTrackerApp.controller("bugsController", function($scope, bug){
            $scope.bugs = [
-               { name : "Stack overflow error", isClosed : false, category : 'client'},
-                { name : "Object reference not set to an instance of an object", isClosed : false, category : 'server'},
-                { name : "Unable to add a new bug", isClosed : false, category : 'server'},
-                { name : "Server communication failure error", isClosed : false, category : 'client'}
+                bug("Stack overflow error"),
+                bug("Object reference not set"),
+                bug("Unable to add a new bug"),
+                bug("Server communication failure error")
            ];
 
             $scope.addNew = function(newBugName){
-                var newBug = {
-                    name : newBugName,
-                    isClosed : false
-                };
+                var newBug = bug(newBugName);
                 $scope.bugs.push(newBug);
             };
             $scope.toggleStatus = function(bug){
-                bug.isClosed = !bug.isClosed;
+                //bug.isClosed = !bug.isClosed;
+                bug.toggle();
             };
             $scope.removeClosed = function(){
                for(var i=$scope.bugs.length-1; i>=0; i--){
@@ -83,13 +116,21 @@
                    }
                }
             };
-            $scope.getClosedCount = function(){
+
+
+           /* $scope.getClosedCount = function(){
                 return $scope.bugs.filter(function(bug){
                     return bug.isClosed;
                 }).length;
-            };
+            };*/
         });
 
+        bugTrackerApp.filter("trimText", function(){
+            return function(bugName, trimLength){
+                trimLength = trimLength || 20;
+                return bugName.length <= trimLength ? bugName : bugName.substr(0,trimLength) + '...';
+        };
+        });
     </script>
 </head>
 <body ng-app="bugTrackerApp">
@@ -97,7 +138,7 @@
     <hr>
     <section class="content" ng-controller="bugsController">
         <div class="stats">
-            <span class="closed">{{getClosedCount()}}</span>
+            <span class="closed">{{ (bugs | filter:{isClosed : true}).length}}</span>
             /
             <span>{{bugs.length}}</span>
         </div>
@@ -125,7 +166,7 @@
                     ng-repeat="bug in bugs | filter:searchBug | orderBy:sortBug.by:sortBug.order"
                     ng-click="toggleStatus(bug)"
                     ng-class="{closed : bug.isClosed}"
-                >{{bug}}</li>
+                >{{bug.name | trimText:30}}</li>
             </ol>
             <hr>
 
