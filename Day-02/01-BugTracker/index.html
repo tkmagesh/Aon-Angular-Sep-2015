@@ -34,13 +34,13 @@
     <script>
     /*Use Cases*/
     /*
-    1. List the bugs
-    2. Add a new bug
-    3. Toggle the closed status of the bug
-    4. Remove closed bugs
-    5. Display statistics
-    6. Search for bugs
-    7. Sort the bugs
+    1. List the bugs - done
+    2. Add a new bug - done
+    3. Toggle the closed status of the bug - done
+    4. Remove closed bugs - done
+    5. Display statistics - done
+    6. Search for bugs - done
+    7. Sort the bugs - done
     8. Improvise the bug display
     9. Persist the bugs in the local storage
     10. Display the createdAt field
@@ -53,26 +53,82 @@
     16. List the bugs by "project"
     */
     </script>
+    <script src="angular.js"></script>
+    <script>
+        var bugTrackerApp = angular.module("bugTrackerApp", []);
+
+        bugTrackerApp.controller("bugsController", function($scope){
+           $scope.bugs = [
+               { name : "Stack overflow error", isClosed : false, category : 'client'},
+                { name : "Object reference not set to an instance of an object", isClosed : false, category : 'server'},
+                { name : "Unable to add a new bug", isClosed : false, category : 'server'},
+                { name : "Server communication failure error", isClosed : false, category : 'client'}
+           ];
+
+            $scope.addNew = function(newBugName){
+                var newBug = {
+                    name : newBugName,
+                    isClosed : false
+                };
+                $scope.bugs.push(newBug);
+            };
+            $scope.toggleStatus = function(bug){
+                bug.isClosed = !bug.isClosed;
+            };
+            $scope.removeClosed = function(){
+               for(var i=$scope.bugs.length-1; i>=0; i--){
+                   var bug = $scope.bugs[i];
+                   if (bug.isClosed){
+                       $scope.bugs.splice(i,1);
+                   }
+               }
+            };
+            $scope.getClosedCount = function(){
+                return $scope.bugs.filter(function(bug){
+                    return bug.isClosed;
+                }).length;
+            };
+        });
+
+    </script>
 </head>
-<body>
+<body ng-app="bugTrackerApp">
     <h1>Bug Tracker</h1>
     <hr>
-    <section class="content">
+    <section class="content" ng-controller="bugsController">
         <div class="stats">
-            <span class="closed">3</span> / <span>5</span>
+            <span class="closed">{{getClosedCount()}}</span>
+            /
+            <span>{{bugs.length}}</span>
         </div>
-        <div class="search"></div>
-        <div class="sort"></div>
+        <div class="search">
+            <label for="">Search :</label>
+            <input type="text" ng-model="searchBug.name">
+            <label for="">is Closed ? :</label>
+            <input type="checkbox" ng-model="searchBug.isClosed" >
+            <input type="button" value="Show All" ng-click="searchBug.isClosed = undefined">
+        </div>
+
+        <div class="sort">
+            <label for="">Order By :</label>
+            <input type="text" ng-model="sortBug.by">
+            <label for=""> Descending ? :</label>
+            <input type="checkbox" ng-model="sortBug.order">
+        </div>
         <div class="list">
             <label for="">Bug :</label>
-            <input type="text" name="" id="">
-            <input type="button" value="Add New">
-            <input type="button" value="Remove Closed">
+            <input type="text" ng-model="newBug">
+            <input type="button" value="Add New" ng-click="addNew(newBug)">
+            <input type="button" value="Remove Closed" ng-click="removeClosed()">
             <ol>
-                <li>Stack overflow error</li>
-                <li>Object reference not set to an instance of an object</li>
-                <li class="closed">Unable to add new bug</li>
+                <li
+                    ng-repeat="bug in bugs | filter:searchBug | orderBy:sortBug.by:sortBug.order"
+                    ng-click="toggleStatus(bug)"
+                    ng-class="{closed : bug.isClosed}"
+                >{{bug}}</li>
             </ol>
+            <hr>
+
         </div>
     </section>
 </body>
