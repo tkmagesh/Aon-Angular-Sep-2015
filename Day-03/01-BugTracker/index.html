@@ -19,8 +19,8 @@
             -webkit-padding-start : 0px;
         }
         li{
-            border : 1px solid grey;
-            background-color: lightgrey;
+            border : 1px solid gray;
+            background-color: #e7e7e7;
             padding: 5px;
             border-radius: 4px;
             margin-bottom: 5px;
@@ -30,7 +30,17 @@
             font-size: 15pt;
             font-weight: bold;
         }
+        .bugName{
+
+        }
+        .timestamp{
+            font-style: italic;
+            font-weight: bold;
+            font-size: small;
+            color : grey;
+        }
     </style>
+
     <script>
     /*Use Cases*/
     /*
@@ -54,8 +64,10 @@
     */
     </script>
     <script src="angular.js"></script>
+    <script src="moment.js"></script>
+    <script src="utils.js"></script>
     <script>
-        var bugTrackerApp = angular.module("bugTrackerApp", ["ng"]);
+        var bugTrackerApp = angular.module("bugTrackerApp", ["utils"]);
         bugTrackerApp.factory("bug", function(){
             function Bug(){}
             Bug.prototype.toggle = function(){
@@ -67,6 +79,7 @@
                 bug.name = defaults.name || '';
                 bug.isClosed = defaults.isClosed || false;
                 bug.category = defaults.category || 'client';
+                bug.createdAt = defaults.createdAt || new Date();
                 return bug;
             }
         });
@@ -92,14 +105,6 @@
                    }
                }
             };
-        });
-
-        bugTrackerApp.value("defaultTrimTextLength", 20);
-        bugTrackerApp.filter("trimText", function(defaultTrimTextLength){
-            return function(bugName, trimLength){
-                trimLength = trimLength || defaultTrimTextLength;
-                return bugName.length <= trimLength ? bugName : bugName.substr(0,trimLength) + '...';
-        };
         });
 
         bugTrackerApp.factory("bugStorage", function(bug){
@@ -137,6 +142,8 @@
                 remove : removeBug
             };
         });
+
+
     </script>
 </head>
 <body ng-app="bugTrackerApp">
@@ -170,9 +177,12 @@
             <ol>
                 <li
                     ng-repeat="bug in bugs | filter:searchBug | orderBy:sortBug.by:sortBug.order"
-                    ng-click="toggleStatus(bug)"
+                ><div class="bugName" ng-click="toggleStatus(bug)"
                     ng-class="{closed : bug.isClosed}"
-                >{{bug.name | trimText:30}}</li>
+>{{bug.name | trimText:30}}</div>
+                 <span class="timestamp">{{bug.createdAt | toMoment}}</span>
+          </li>
+
             </ol>
             <hr>
 
