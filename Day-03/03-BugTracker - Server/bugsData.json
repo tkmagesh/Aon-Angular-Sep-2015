@@ -1,0 +1,39 @@
+{
+  "bugs": [
+    {
+      "id": 1,
+      "name": "stack overflow error",
+      "isClosed": false,
+      "category": "client",
+      "createdAt": "2015-09-20T04:56:26.384Z"
+    },
+    {
+      "id": 2,
+      "name": "object reference not set to an intance of an object",
+      "isClosed": false,
+      "category": "client",
+      "createdAt": "2015-09-20T04:30:26.384Z"
+    },
+    {
+      "id": 3,
+      "name": "server communication failure",
+      "isClosed": false,
+      "category": "client",
+      "createdAt": "2015-09-20T03:56:26.384Z"
+    },
+    {
+      "id": 4,
+      "name": "user authentication error",
+      "isClosed": false,
+      "category": "client",
+      "createdAt": "2015-09-20T03:36:26.384Z"
+    },
+    {
+      "name": "data parsing fails",
+      "isClosed": false,
+      "category": "server",
+      "createdAt": "2015-09-20T02:30:26.384Z",
+      "id": 5
+    }
+  ]
+}
