@@ -14,7 +14,7 @@
             font-weight: bold;
         }
         ol{
-            width : 50%;
+           /* width : 50%;*/
             list-style: none;
             -webkit-padding-start : 0px;
         }
@@ -68,6 +68,7 @@
     <script src="utils.js"></script>
     <script>
         var bugTrackerApp = angular.module("bugTrackerApp", ["utils"]);
+
         bugTrackerApp.factory("bug", function(){
             function Bug(){}
             Bug.prototype.toggle = function(){
@@ -84,14 +85,45 @@
             }
         });
 
-        bugTrackerApp.controller("bugsController", function($scope, bug, $http){
-           $scope.bugs = [];
-            var promise = $http.get('/bugs');
-            promise.then(function(response){
-                $scope.bugs = response.data.map(function(obj){
-                    return bug(obj);
+        /*bugTrackerApp.factory("bugService", function($http, bug, $q){
+            return {
+                getAll : function(){
+                    var defered = $q.defer();
+
+                    var promise = $http.get('/bugs');
+                    promise.then(function(response){
+                        var result =  response.data.map(function(obj){
+                            return bug(obj);
+                        });
+                        defered.resolve(result);
+                    });
+
+                    return defered.promise;
+                }
+            }
+        });*/
+
+        bugTrackerApp.factory("bugService", function($http, bug){
+            return {
+                getAll : function(){
+                    return $http
+                        .get('/bugs')
+                        .then(function(response){
+                            return response.data.map(function(obj){
+                                return bug(obj);
+                            });
+                        });
+                }
+            }
+        });
+        bugTrackerApp.controller("bugsController", function($scope, bug, $http, bugService){
+           //$scope.bugs = ;
+            bugService
+                .getAll()
+                .then(function(bugs){
+                    $scope.bugs = bugs;
                 });
-            });
+
 
             $scope.addNew = function(newBugName){
                 var newBug = bug({name : newBugName});
