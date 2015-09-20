@@ -113,6 +113,13 @@
                                 return bug(obj);
                             });
                         });
+                },
+                save : function(bugData){
+                     return $http
+                        .post('/bugs', bugData)
+                        .then(function(response){
+                            return bug(response.data);
+                        });
                 }
             }
         });
@@ -127,11 +134,9 @@
 
             $scope.addNew = function(newBugName){
                 var newBug = bug({name : newBugName});
-                $http
-                    .post('/bugs', newBug)
-                    .then(function(response){
-                        $scope.bugs.push(bug(response.data));
-                    });
+                bugService.save(newBug).then(function(bugObj){
+                    $scope.bugs.push(bugObj);
+                });
             };
             $scope.toggleStatus = function(bug){
                 bug.toggle();
