@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Routing</title>
+    <script src="angular.js"></script>
+    <script src="angular-route.js"></script>
+    <script>
+        var myApp = angular.module("myApp", ["ngRoute"]);
+        myApp.config(function($routeProvider){
+           $routeProvider
+            .when("/products", {
+                //template : '<h3>Products</h3>'
+               templateUrl : 'templates/products.html',
+               controller : 'productsController'
+            })
+            .when("/customers", {
+               //template : '<h3>Customers</h3>'
+               templateUrl : 'templates/customers.html'
+            })
+            .when("/products/:id", {
+               templateUrl : 'templates/productInfo.html',
+               controller : 'productInfoController'
+            })
+            .otherwise({
+                redirectTo : "/products"
+            });
+        });
+        myApp.factory("productsService", function(){
+            return {
+                getAll : function(){
+                    return [
+                        {id : 1, name : "Pen", cost : 50, units : 100, desc : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae ratione sunt saepe veritatis ad maiores, nemo vel quo, temporibus ullam non voluptatum. Delectus, voluptatem, error earum aliquam nemo quam iusto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam temporibus consectetur iste quisquam, minus nihil voluptatem quibusdam dolores earum quis fugiat esse ullam laudantium itaque, quos odit tenetur, molestiae. Tenetur."},
+                        {id : 2, name : "Hen", cost : 100, units : 50, desc : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae ratione sunt saepe veritatis ad maiores, nemo vel quo, temporibus ullam non voluptatum. Delectus, voluptatem, error earum aliquam nemo quam iusto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam temporibus consectetur iste quisquam, minus nihil voluptatem quibusdam dolores earum quis fugiat esse ullam laudantium itaque, quos odit tenetur, molestiae. Tenetur."},
+                        {id : 3, name : "Ten", cost : 10, units : 10, desc : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae ratione sunt saepe veritatis ad maiores, nemo vel quo, temporibus ullam non voluptatum. Delectus, voluptatem, error earum aliquam nemo quam iusto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam temporibus consectetur iste quisquam, minus nihil voluptatem quibusdam dolores earum quis fugiat esse ullam laudantium itaque, quos odit tenetur, molestiae. Tenetur."},
+                        {id : 4, name : "Den", cost : 200, units : 200, desc : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae ratione sunt saepe veritatis ad maiores, nemo vel quo, temporibus ullam non voluptatum. Delectus, voluptatem, error earum aliquam nemo quam iusto!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam temporibus consectetur iste quisquam, minus nihil voluptatem quibusdam dolores earum quis fugiat esse ullam laudantium itaque, quos odit tenetur, molestiae. Tenetur."}
+                    ]
+                }
+            }
+
+        });
+        myApp.controller("productsController", function($scope, productsService){
+            $scope.products = productsService.getAll();
+        });
+        myApp.controller("productInfoController", function($scope, productsService, $routeParams){
+            var pid = parseInt($routeParams.id);
+            $scope.product = productsService.getAll()
+                .filter(function(product){
+                    return product.id === pid;
+                })[0];
+        });
+    </script>
+</head>
+<body ng-app="myApp">
+    <h1>Flopkart</h1>
+    <a href="#/products">Products</a> &nbsp; &nbsp; <a href="#/customers">Customers</a>
+    <hr>
+    <div ng-view></div>
+</body>
+</html>
